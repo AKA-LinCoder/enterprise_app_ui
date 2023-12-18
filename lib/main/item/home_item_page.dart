@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 /// FileName home_item_page
 ///
@@ -31,52 +32,115 @@ class _HomeItemPageState extends State<HomeItemPage> {
 
   num bannerIndex = 0;
 
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey[200],
-      child: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: 100,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              Widget bannerWidget = buildBannerFunction();
-              return bannerWidget;
-            } else {
-              return Container(
-                height: 130,
-                margin: const EdgeInsets.only(top: 5),
-                color: Colors.white,
-                padding: const EdgeInsets.all(8.0),
-                child:  Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Text("我是标题",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 10,),
-                    const Text("我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容"
-                        "我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容v我是内容我是内容",
-                      style: TextStyle(fontSize: 14,fontWeight: FontWeight.normal,color: Colors.grey),maxLines: 2,overflow: TextOverflow.ellipsis,),
-                    Expanded(child: Container()),
-                    Row(
-                      children: [
-                        Text("海贼王路飞",style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.grey[500]),),
-                        const SizedBox(width: 20,),
-                        Icon(Icons.thumb_up_alt_outlined,size: 15,color: Colors.grey[500],),
-                        const SizedBox(width: 6,),
-                        Text("16",style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.grey[500]),),
-                        const SizedBox(width: 12,),
-                        Icon(Icons.share_outlined,size: 15,color: Colors.grey[500],),
-                        const SizedBox(width: 6,),
-                        Text("52",style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.grey[500]),),
-                      ],
-                    )
-                  ],
-                ),
-              );
-            }
-          }),
+      child: SmartRefresher(
+        enablePullUp: true,
+        enablePullDown: true,
+        controller: refreshController,
+        ///下拉刷新
+        onRefresh: onRefresh,
+        ///上拉加载更多
+        onLoading: onLoading,
+        ///把需要刷新的列表作为可刷新组件的直接子组件，这样可以避免有些位置无法刷新的问题
+        child: buildListView(),
+      ),
     );
+  }
+
+  Widget buildListView() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: 100,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            Widget bannerWidget = buildBannerFunction();
+            return bannerWidget;
+          } else {
+            return Container(
+              height: 130,
+              margin: const EdgeInsets.only(top: 5),
+              color: Colors.white,
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Text(
+                    "我是标题",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容"
+                    "我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容v我是内容我是内容",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Expanded(child: Container()),
+                  Row(
+                    children: [
+                      Text(
+                        "海贼王路飞",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey[500]),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Icon(
+                        Icons.thumb_up_alt_outlined,
+                        size: 15,
+                        color: Colors.grey[500],
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        "16",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey[500]),
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Icon(
+                        Icons.share_outlined,
+                        size: 15,
+                        color: Colors.grey[500],
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        "52",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey[500]),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          }
+        });
   }
 
   Widget buildBannerFunction() {
@@ -86,7 +150,6 @@ class _HomeItemPageState extends State<HomeItemPage> {
       height: swiperHeight,
       child: Stack(
         children: [
-
           Positioned(
             left: 0,
             right: 0,
@@ -94,7 +157,7 @@ class _HomeItemPageState extends State<HomeItemPage> {
             top: 0,
             child: Swiper(
               autoplay: true,
-              onIndexChanged: (index){
+              onIndexChanged: (index) {
                 setState(() {
                   bannerIndex = index;
                 });
@@ -123,5 +186,25 @@ class _HomeItemPageState extends State<HomeItemPage> {
         ],
       ),
     );
+  }
+
+  ///@title onRefresh
+  ///@description 下拉刷新
+  ///@updateTime 2023/12/18 11:22
+  ///@author LinGuanYu
+  onRefresh() async {
+    Future.delayed(const Duration(seconds: 3), () {
+      refreshController.refreshCompleted();
+    });
+  }
+
+  ///@title onLoading
+  ///@description 上拉加载
+  ///@updateTime 2023/12/18 11:22
+  ///@author LinGuanYu
+  onLoading() async {
+    Future.delayed(const Duration(seconds: 3), () {
+      refreshController.loadComplete();
+    });
   }
 }

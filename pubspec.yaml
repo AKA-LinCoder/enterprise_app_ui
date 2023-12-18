@@ -52,7 +52,8 @@ dev_dependencies:
   flustars: ^2.0.1
   # 引导页
   card_swiper: ^3.0.1
-  # 轮播图
+  # 下拉刷新
+  pull_to_refresh_flutter3: ^2.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
