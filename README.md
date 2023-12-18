@@ -1,6 +1,6 @@
 # my_enterprise_app
 
-企业级app
+企业级appUI
 
 ## Getting Started
 

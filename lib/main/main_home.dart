@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_enterprise_app/main/item/home_item_page.dart';
 
 /// FileName main_home
 ///
@@ -22,12 +23,16 @@ class _MainHomePageState extends State<MainHomePage> with SingleTickerProviderSt
 
   late TabController tabController;
 
+  List<Widget> bodyPageList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     tabController = TabController(length: topTabList.length, vsync: this);
+    for (int pageIndex = 0; pageIndex < topTabList.length; pageIndex++) {
+      bodyPageList.add(HomeItemPage(pageTitle: topTabList[pageIndex], pageIndex: pageIndex));
+    }
   }
 
 
@@ -86,7 +91,7 @@ class _MainHomePageState extends State<MainHomePage> with SingleTickerProviderSt
         },
         body: TabBarView(
           controller: tabController,
-          children: topTabList.map((e) => Center(child: Text(e),)).toList(),
+          children: bodyPageList,
         ),
       ),
     );
