@@ -39,8 +39,8 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
 
   ///对应页面
-  List<Widget> pageList = const [
-    MainHomePage(),
+  List<Widget> pageList =  [
+    const MainHomePage(),
     MainForumPage(),
     MainDiscoveryPage(),
     MainMinePage()

@@ -54,6 +54,12 @@ dev_dependencies:
   card_swiper: ^3.0.1
   # 下拉刷新
   pull_to_refresh_flutter3: ^2.0.2
+  # 多语言
+  flutter_localization:
+  # 多种刷新详见
+  extended_nested_scroll_view: ^6.1.2
+  pull_to_refresh_notification: ^3.1.0
+  loading_more_list: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

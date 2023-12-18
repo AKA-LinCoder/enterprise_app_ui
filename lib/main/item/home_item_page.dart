@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -35,6 +36,25 @@ class _HomeItemPageState extends State<HomeItemPage> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+
+
+  final LoadIndicator refreshFooter = const ClassicFooter(
+    loadingText: "加载中",
+    noDataText: "没有更多数据",
+    failedText: "加载失败",
+    canLoadingText: "释放加载",
+    idleText: "上拉加载更多",
+  );
+
+  final Widget refreshHeader = const ClassicHeader(
+    refreshingText: "刷新中",
+    releaseText: "松开刷新",
+    idleText: "松开刷新数据",
+    failedText: "刷新失败",
+    completeText: "刷新完成",
+  );
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,6 +63,8 @@ class _HomeItemPageState extends State<HomeItemPage> {
         enablePullUp: true,
         enablePullDown: true,
         controller: refreshController,
+        // header: refreshHeader,
+        // footer: refreshFooter,
         ///下拉刷新
         onRefresh: onRefresh,
         ///上拉加载更多
@@ -52,6 +74,10 @@ class _HomeItemPageState extends State<HomeItemPage> {
       ),
     );
   }
+
+
+
+
 
   Widget buildListView() {
     return ListView.builder(
