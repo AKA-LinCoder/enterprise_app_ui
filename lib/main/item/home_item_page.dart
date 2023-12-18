@@ -33,21 +33,50 @@ class _HomeItemPageState extends State<HomeItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        padding: EdgeInsets.all(8),
-        itemCount: 100,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            Widget bannerWidget = buildBannerFunction();
-            return bannerWidget;
-          } else {
-            return Container(
-              height: 100,
-              margin: const EdgeInsets.only(top: 10),
-              color: Colors.deepOrange,
-            );
-          }
-        });
+    return Container(
+      color: Colors.grey[200],
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: 100,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              Widget bannerWidget = buildBannerFunction();
+              return bannerWidget;
+            } else {
+              return Container(
+                height: 130,
+                margin: const EdgeInsets.only(top: 5),
+                color: Colors.white,
+                padding: const EdgeInsets.all(8.0),
+                child:  Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Text("我是标题",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 10,),
+                    const Text("我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容"
+                        "我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容v我是内容我是内容",
+                      style: TextStyle(fontSize: 14,fontWeight: FontWeight.normal,color: Colors.grey),maxLines: 2,overflow: TextOverflow.ellipsis,),
+                    Expanded(child: Container()),
+                    Row(
+                      children: [
+                        Text("海贼王路飞",style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.grey[500]),),
+                        const SizedBox(width: 20,),
+                        Icon(Icons.thumb_up_alt_outlined,size: 15,color: Colors.grey[500],),
+                        const SizedBox(width: 6,),
+                        Text("16",style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.grey[500]),),
+                        const SizedBox(width: 12,),
+                        Icon(Icons.share_outlined,size: 15,color: Colors.grey[500],),
+                        const SizedBox(width: 6,),
+                        Text("52",style: TextStyle(fontSize: 12,fontWeight: FontWeight.normal,color: Colors.grey[500]),),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }
+          }),
+    );
   }
 
   Widget buildBannerFunction() {
