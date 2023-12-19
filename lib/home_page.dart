@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     "tab1.png",
     "tab2.png",
     "tab3.png",
-    "like_icon.png",
+    "tiktok.png",
     "tab4.png"
   ];
 
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     "tab1fill.png",
     "tab2fill.png",
     "tab3fill.png",
-    "like_icon_2.png",
+    "tiktokfill.png",
     "tab4fill.png",
   ];
 

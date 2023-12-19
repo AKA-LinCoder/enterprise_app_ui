@@ -54,7 +54,7 @@ class _MainTikTokPageState extends State<MainTikTokPage>
       videoModel.videoImag =
       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582996017736&di=101751f6d5b16e03d501001ca62633d4&imgtype=0&src=http%3A%2F%2Fupload.idcquan.com%2F2018%2F0125%2F1516851762394.jpg";
       videoModel.videoUrl =
-      "http://pic.studyyoun.com/1583058399368141.mp4";
+      "http://111.9.131.75:9520/seismic/2023/12/07/53633817_20231207095239A029.mp4";
 
       videoList.add(videoModel);
     }
@@ -72,7 +72,7 @@ class _MainTikTokPageState extends State<MainTikTokPage>
       videoModel.videoImag =
       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582996017736&di=101751f6d5b16e03d501001ca62633d4&imgtype=0&src=http%3A%2F%2Fupload.idcquan.com%2F2018%2F0125%2F1516851762394.jpg";
       videoModel.videoUrl =
-      "http://pic.studyyoun.com/MaterialApp%E7%BB%84%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8.mp4";
+      "http://111.9.131.75:9520/seismic/2023/12/07/53633817_20231207095239A029.mp4";
 
       videoList2.add(videoModel);
     }
