@@ -21,6 +21,11 @@ class _MainTikTokPageState extends State<MainTikTokPage>
 
   late TabController tabController;
 
+
+  List<String> videoList = [
+
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,6 +35,10 @@ class _MainTikTokPageState extends State<MainTikTokPage>
     }
     // tabTextList.map((e) => tabWidgetList.add(Tab(text:e.toString())));
     tabController = TabController(length: tabTextList.length, vsync: this);
+
+    for(int i = 0;i <10;i++){
+      videoList.add(i.toString());
+    }
   }
 
   @override
@@ -68,14 +77,7 @@ class _MainTikTokPageState extends State<MainTikTokPage>
   buildTableViewWidget() {
     return TabBarView(
         controller: tabController,
-        children: tabTextList
-            .map((e) => Center(
-                  child: Text(
-                    e,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ))
-            .toList());
+        children: tabTextList.map((e) => buildTableViewItemWidget(e)).toList());
   }
 
   buildTabBarWidget() {
@@ -84,6 +86,7 @@ class _MainTikTokPageState extends State<MainTikTokPage>
       alignment: Alignment.topCenter,
       child: TabBar(
         tabAlignment: TabAlignment.center,
+
         ///取消下面的divider
         dividerHeight: 0,
         ///设置之后就不会平分宽度
@@ -94,6 +97,26 @@ class _MainTikTokPageState extends State<MainTikTokPage>
         ///指示器宽度与文字一样
         indicatorSize: TabBarIndicatorSize.label,
         tabs: tabWidgetList, labelColor: Colors.white,
+      ),
+    );
+  }
+
+  ///用来实现上下滑动的页面
+  Widget buildTableViewItemWidget(String e) {
+    return PageView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: videoList.length,
+        itemBuilder: (context, index) {
+          return buildPageViewItemWidget(e, index);
+        });
+  }
+
+  ///页面主要内容显示区域
+  buildPageViewItemWidget(String value, int index) {
+    return Center(
+      child: Text(
+        value + index.toString(),
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }
