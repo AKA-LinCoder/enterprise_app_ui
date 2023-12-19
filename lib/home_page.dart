@@ -3,6 +3,7 @@ import 'package:my_enterprise_app/main/main_discovery.dart';
 import 'package:my_enterprise_app/main/main_forum.dart';
 import 'package:my_enterprise_app/main/main_home.dart';
 import 'package:my_enterprise_app/main/main_mine.dart';
+import 'package:my_enterprise_app/main/main_tiktok.dart';
 
 /// FileName home_page
 ///
@@ -19,12 +20,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> tabTitleList = ["首页", "论坛", "发现", "我的"];
+  List<String> tabTitleList = ["首页", "论坛", "发现","抖音", "我的"];
 
   List<String> tabNormalImagesList = [
     "tab1.png",
     "tab2.png",
     "tab3.png",
+    "like_icon.png",
     "tab4.png"
   ];
 
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     "tab1fill.png",
     "tab2fill.png",
     "tab3fill.png",
+    "like_icon_2.png",
     "tab4fill.png",
   ];
 
@@ -43,6 +46,7 @@ class _HomePageState extends State<HomePage> {
     const MainHomePage(),
     MainForumPage(),
     MainDiscoveryPage(),
+    MainTikTokPage(),
     MainMinePage()
   ];
 
@@ -92,6 +96,13 @@ class _HomePageState extends State<HomePage> {
               label: tabTitleList[3],
               icon: Image.asset(
                 "images/2.0/${selectedIndex == 3 ? tabSelectImagesList[3] : tabNormalImagesList[3]}",
+                width: 26,
+                height: 26,
+              )),
+          BottomNavigationBarItem(
+              label: tabTitleList[4],
+              icon: Image.asset(
+                "images/2.0/${selectedIndex == 4 ? tabSelectImagesList[4] : tabNormalImagesList[4]}",
                 width: 26,
                 height: 26,
               )),

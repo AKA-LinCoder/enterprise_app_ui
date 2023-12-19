@@ -55,7 +55,7 @@ dev_dependencies:
   # 下拉刷新
   pull_to_refresh_flutter3: ^2.0.2
   # 多语言
-  flutter_localization:
+  flutter_localization: ^0.2.0
   # 多种刷新详见
   extended_nested_scroll_view: ^6.1.2
   pull_to_refresh_notification: ^3.1.0
