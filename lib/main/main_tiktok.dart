@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_enterprise_app/bean/bean_video.dart';
+import 'package:my_enterprise_app/main/item/find_video_item_page.dart';
 
 /// FileName main_find
 ///
@@ -22,9 +24,11 @@ class _MainTikTokPageState extends State<MainTikTokPage>
   late TabController tabController;
 
 
-  List<String> videoList = [
+  ///推荐
+  List<VideoModel> videoList = [];
 
-  ];
+  ///关注
+  List<VideoModel> videoList2 = [];
 
   @override
   void initState() {
@@ -36,8 +40,41 @@ class _MainTikTokPageState extends State<MainTikTokPage>
     // tabTextList.map((e) => tabWidgetList.add(Tab(text:e.toString())));
     tabController = TabController(length: tabTextList.length, vsync: this);
 
-    for(int i = 0;i <10;i++){
-      videoList.add(i.toString());
+    for (int i = 0; i < 10; i++) {
+      VideoModel videoModel = VideoModel();
+      videoModel.videoName = "推荐测试数据$i";
+      videoModel.pariseCount = i * 22;
+      if (i % 3 == 0) {
+        videoModel.isAttention = true;
+        videoModel.isLike = true;
+      } else {
+        videoModel.isAttention = false;
+        videoModel.isLike = false;
+      }
+      videoModel.videoImag =
+      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582996017736&di=101751f6d5b16e03d501001ca62633d4&imgtype=0&src=http%3A%2F%2Fupload.idcquan.com%2F2018%2F0125%2F1516851762394.jpg";
+      videoModel.videoUrl =
+      "http://pic.studyyoun.com/1583058399368141.mp4";
+
+      videoList.add(videoModel);
+    }
+
+    for (int i = 0; i < 3; i++) {
+      VideoModel videoModel =  VideoModel();
+      videoModel.videoName = "关注测试数据$i";
+      videoModel.pariseCount = i * 22;
+      videoModel.isAttention = true;
+      if (i % 3 == 0) {
+        videoModel.isLike = true;
+      } else {
+        videoModel.isLike = false;
+      }
+      videoModel.videoImag =
+      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582996017736&di=101751f6d5b16e03d501001ca62633d4&imgtype=0&src=http%3A%2F%2Fupload.idcquan.com%2F2018%2F0125%2F1516851762394.jpg";
+      videoModel.videoUrl =
+      "http://pic.studyyoun.com/MaterialApp%E7%BB%84%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8.mp4";
+
+      videoList2.add(videoModel);
     }
   }
 
@@ -103,21 +140,23 @@ class _MainTikTokPageState extends State<MainTikTokPage>
 
   ///用来实现上下滑动的页面
   Widget buildTableViewItemWidget(String e) {
+    List<VideoModel> list =[];
+    if(e == "推荐"){
+      list= videoList;
+    }else{
+      list = videoList2;
+    }
     return PageView.builder(
         scrollDirection: Axis.vertical,
         itemCount: videoList.length,
         itemBuilder: (context, index) {
-          return buildPageViewItemWidget(e, index);
+          VideoModel videoModel = list[index];
+          return buildPageViewItemWidget(e, videoModel);
         });
   }
 
   ///页面主要内容显示区域
-  buildPageViewItemWidget(String value, int index) {
-    return Center(
-      child: Text(
-        value + index.toString(),
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
+  buildPageViewItemWidget(String value, VideoModel videoModel) {
+    return FindVideoItemPage(value,videoModel);
   }
 }
