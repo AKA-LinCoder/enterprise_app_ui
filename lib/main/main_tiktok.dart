@@ -52,14 +52,14 @@ class _MainTikTokPageState extends State<MainTikTokPage>
         videoModel.isLike = false;
       }
       videoModel.videoImag =
-      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582996017736&di=101751f6d5b16e03d501001ca62633d4&imgtype=0&src=http%3A%2F%2Fupload.idcquan.com%2F2018%2F0125%2F1516851762394.jpg";
+      "images/2.0/logo.jpg";
       videoModel.videoUrl =
       "http://111.9.131.75:9520/seismic/2023/12/07/53633817_20231207095239A029.mp4";
 
       videoList.add(videoModel);
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 10; i++) {
       VideoModel videoModel =  VideoModel();
       videoModel.videoName = "关注测试数据$i";
       videoModel.pariseCount = i * 22;
@@ -70,7 +70,7 @@ class _MainTikTokPageState extends State<MainTikTokPage>
         videoModel.isLike = false;
       }
       videoModel.videoImag =
-      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582996017736&di=101751f6d5b16e03d501001ca62633d4&imgtype=0&src=http%3A%2F%2Fupload.idcquan.com%2F2018%2F0125%2F1516851762394.jpg";
+      "images/2.0/logo.jpg";
       videoModel.videoUrl =
       "http://111.9.131.75:9520/seismic/2023/12/07/53633817_20231207095239A029.mp4";
 

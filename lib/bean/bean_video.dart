@@ -13,7 +13,7 @@ class VideoModel {
   ///是否喜欢
   bool isLike = false;
   ///点赞的个数
-  num pariseCount = 0;
+  int pariseCount = 0;
   ///分享的次数
-  num shareCount=0;
+  int shareCount=0;
 }
