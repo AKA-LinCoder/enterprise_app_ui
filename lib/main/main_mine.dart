@@ -33,7 +33,7 @@ class _MainMinePageState extends State<MainMinePage> {
     //获取状态栏高度
     double topHeight = MediaQuery.of(context).padding.top;
 
-    return Container(
+    return SizedBox(
       height: 44 + topHeight+14,
       child: Column(
         children: [
@@ -106,7 +106,9 @@ class _MainMinePageState extends State<MainMinePage> {
                 height: 150,
                 color: const Color(0xfff0ebe6),
               ),
-              buildUserInfo()
+              buildUserInfo(),
+              ///用户未登录UI
+              buildUnLoginUI(),
             ],
           )
 
@@ -196,6 +198,59 @@ class _MainMinePageState extends State<MainMinePage> {
         Text(title,style: const TextStyle(fontSize: 18,color: Colors.black54),)
       ],
     ));
+  }
+
+  buildUnLoginUI() {
+    return Container(
+      height: 180,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              buildIconButton("images/2.0/my_qq_icon.png"),
+              buildIconButton("images/2.0/my_phone_icon.png"),
+              buildIconButton("images/2.0/my_weixin_icon.png"),
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(6)
+              ),
+              child: Text("登录 注册",style: const TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),))
+        ],
+      ),
+    );
+  }
+
+
+  buildIconButton(String iconName,{Function()? onPressed}) {
+    return  InkWell(
+      onTap: onPressed,
+      child: Container(
+        // margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 12),
+          margin: const EdgeInsets.only(bottom: 12,left: 12,right: 20),
+          width: 50,
+          height: 50,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            // color: Colors.grey[300],
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(25)
+          ),
+          child: Image.asset(iconName,width: 22,height: 22,)),
+    );
   }
 
 
