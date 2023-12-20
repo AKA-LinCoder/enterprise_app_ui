@@ -61,6 +61,10 @@ dev_dependencies:
   pull_to_refresh_notification: ^3.1.0
   loading_more_list: ^6.0.0
   video_player: ^2.8.1
+  cached_network_image: ^3.3.0
+  dio:
+  image_picker:
+  provider:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
