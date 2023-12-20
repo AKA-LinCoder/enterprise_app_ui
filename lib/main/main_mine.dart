@@ -15,6 +15,10 @@ class MainMinePage extends StatefulWidget {
 }
 
 class _MainMinePageState extends State<MainMinePage> {
+
+  bool isLogin = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,10 +84,17 @@ class _MainMinePageState extends State<MainMinePage> {
                           height: 20,
                         ),
                         const SizedBox(width: 16 ,),
-                        Image.asset(
-                          "images/2.0/my_meun_icon.png",
-                          width: 20,
-                          height: 20,
+                        GestureDetector(
+                          onTap: (){
+                            setState(() {
+                              isLogin = !isLogin;
+                            });
+                          },
+                          child: Image.asset(
+                            "images/2.0/my_meun_icon.png",
+                            width: 20,
+                            height: 20,
+                          ),
                         ),
                       ],
                     ),
@@ -106,7 +117,7 @@ class _MainMinePageState extends State<MainMinePage> {
                 height: 150,
                 color: const Color(0xfff0ebe6),
               ),
-              buildUserInfo(),
+              isLogin?buildUserInfo():
               ///用户未登录UI
               buildUnLoginUI(),
             ],
@@ -217,7 +228,9 @@ class _MainMinePageState extends State<MainMinePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              buildIconButton("images/2.0/my_qq_icon.png"),
+              buildIconButton("images/2.0/my_qq_icon.png",onPressed: (){
+                print("tap me");
+              }),
               buildIconButton("images/2.0/my_phone_icon.png"),
               buildIconButton("images/2.0/my_weixin_icon.png"),
             ],
@@ -228,7 +241,7 @@ class _MainMinePageState extends State<MainMinePage> {
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(6)
               ),
-              child: Text("登录 注册",style: const TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),))
+              child: const Text("登录 注册",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),))
         ],
       ),
     );
@@ -236,22 +249,27 @@ class _MainMinePageState extends State<MainMinePage> {
 
 
   buildIconButton(String iconName,{Function()? onPressed}) {
-    return  InkWell(
-      onTap: onPressed,
-      child: Container(
-        // margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 12),
-          margin: const EdgeInsets.only(bottom: 12,left: 12,right: 20),
-          width: 50,
-          height: 50,
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            // color: Colors.grey[300],
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(25)
-          ),
-          child: Image.asset(iconName,width: 22,height: 22,)),
+    return  Material(
+      child: InkWell(
+        onTap: onPressed,
+        child: Container(
+          // margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 12),
+            margin: const EdgeInsets.only(bottom: 12,left: 12,right: 20),
+            width: 50,
+            height: 50,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              // color: Colors.grey[300],
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(25)
+            ),
+            child: Image.asset(iconName,width: 22,height: 22,)),
+      ),
     );
   }
+
+
+
 
 
 }
