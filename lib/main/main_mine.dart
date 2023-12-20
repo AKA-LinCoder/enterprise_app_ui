@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_enterprise_app/base/base_page.dart';
+import 'package:my_enterprise_app/login_page.dart';
 
 /// FileName main_mine
 ///
@@ -14,7 +16,7 @@ class MainMinePage extends StatefulWidget {
   State<MainMinePage> createState() => _MainMinePageState();
 }
 
-class _MainMinePageState extends State<MainMinePage> {
+class _MainMinePageState extends BasePage<MainMinePage> {
 
   bool isLogin = false;
 
@@ -235,13 +237,18 @@ class _MainMinePageState extends State<MainMinePage> {
               buildIconButton("images/2.0/my_weixin_icon.png"),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(6)
-              ),
-              child: const Text("登录 注册",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),))
+          GestureDetector(
+            onTap: (){
+               pushPage(const LoginPage());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(6)
+                ),
+                child: const Text("登录 注册",style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.bold),)),
+          )
         ],
       ),
     );
