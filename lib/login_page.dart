@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,9 +17,23 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+
+  ///未输入时文本框的颜色
+  Color normalColor = const Color(0x80fafafa);
+
+  ///正在输入时文本框颜色
+  Color selectColor = Colors.green;
+
+  FocusNode focusNode1 = FocusNode();
+  FocusNode focusNode2 = FocusNode();
+
+  ///动画注册器
+  late AnimationController animationController;
+
 
   @override
   void initState() {
@@ -29,6 +45,13 @@ class _LoginPageState extends State<LoginPage> {
 
     focusNode2.addListener(() {
       setState(() {});
+    });
+
+    animationController = AnimationController(vsync: this,duration: const Duration(seconds: 4));
+    animationController.addListener(() {
+      setState(() {
+
+      });
     });
   }
 
@@ -55,12 +78,37 @@ class _LoginPageState extends State<LoginPage> {
             buildBlurBg(),
 
             ///用户输入框层
-            buildLoginInputWidget()
+            buildLoginInputWidget(),
+
+
           ],
         ),
       ),
     );
   }
+  
+  
+  buildAgreementWidget(){
+    return Container(
+      margin: EdgeInsets.only(left: 20,right: 20,top: 10),
+      child: Row(
+        children: [
+          buildCircleCheckBox(),
+          const SizedBox(width: 1,),
+          Expanded(child: RichText(text: TextSpan(text: "注册同意",style: const TextStyle(fontSize: 15),children: [
+            const TextSpan(text: "《用户注册协议》",style: TextStyle(color: Colors.orangeAccent,fontSize: 15)),
+            const TextSpan(text: "与",style: TextStyle(fontSize: 15)),
+            TextSpan(text: "《隐私协议》",style: const TextStyle(color: Colors.orangeAccent,fontSize: 15),recognizer: TapGestureRecognizer()..onTap = (){
+              if (kDebugMode) {
+                print("点击了隐私协议00");
+              }
+            }),
+          ]),))
+        ],
+      ),
+    );
+  }
+  
 
   ///全屏背景图
   buildBgWidget() {
@@ -114,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   // FilteringTextInputFormatter.a
                 ],
                 keyboardType: TextInputType.number),
+            const SizedBox(height: 30,),
             buildInputWidget(
                 iconData: Icons.lock,
                 controller: passwordController,
@@ -121,6 +170,12 @@ class _LoginPageState extends State<LoginPage> {
                 nextFocusNode: null,
                 hintText: "请输入密码",
                 keyboardType: TextInputType.text),
+            const SizedBox(height: 30,),
+            ///用户协议层
+            buildAgreementWidget(),
+            const SizedBox(height: 30,),
+            ///注册按钮
+            buildRegisterButton(),
           ],
         ),
       ),
@@ -131,12 +186,25 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              "images/2.0/logo.jpg",
-              width: 55,
-            )),
+        GestureDetector(
+          onTap: (){
+            ///启动动画控制器
+            animationController.forward();
+
+            // setState(() {
+            //   isRegistering = !isRegistering;
+            // });
+            Future.delayed(const Duration(milliseconds: 8000), (){
+              animationController.reverse();
+            });
+          },
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                "images/2.0/logo.jpg",
+                width: 55,
+              )),
+        ),
         const SizedBox(
           width: 10,
         ),
@@ -149,15 +217,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  ///未输入时文本框的颜色
-  Color normalColor = const Color(0x80fafafa);
-
-  ///正在输入时文本框颜色
-  Color selectColor = Colors.green;
-
-  FocusNode focusNode1 = FocusNode();
-  FocusNode focusNode2 = FocusNode();
-
+ 
   buildInputWidget(
       {required IconData iconData,
       required TextEditingController controller,
@@ -261,4 +321,136 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
+
+  bool checkIsSelect = false;
+
+  buildCircleCheckBox() {
+    return Checkbox(
+        // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        value: checkIsSelect,
+        onChanged: (value){
+          setState(() {
+            checkIsSelect = ! checkIsSelect;
+          });
+        },
+        checkColor: Colors.white, //修改勾选时的勾选颜色为红色
+        activeColor: Colors.orange, //去掉勾选时背景颜色
+        side: MaterialStateBorderSide.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            //修改勾选时边框颜色为红色
+            return const BorderSide(width: 2, color: Colors.orange);
+          }
+          //修改默认时边框颜色为绿色
+          return const BorderSide(width: 2, color: Colors.white);
+        },
+        ));
+  }
+
+  bool isRegistering = false;
+
+  buildRegisterButton() {
+    return InkWell(
+
+      onTap: (){
+        if (kDebugMode) {
+          print("我使劲点开");
+        }
+        ///启动动画控制器
+        animationController.forward();
+
+        // setState(() {
+        //   isRegistering = !isRegistering;
+        // });
+        Future.delayed(const Duration(milliseconds: 8000), (){
+          ///模拟失败
+          currentRequestStatus = RequestStatus.error;
+          setState(() {
+
+          });
+          Future.delayed(const Duration(milliseconds: 2000), (){
+            animationController.reverse();
+          });
+
+        });
+      },
+
+      child: Stack(
+        children: [
+
+          Transform(
+            alignment: Alignment.center,
+            ///x,y,z缩放比
+            transform: Matrix4.diagonal3Values(1.0-animationController.value, 1.0, 1.0),
+            child: Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              height: 48,
+              margin: const EdgeInsets.symmetric(horizontal: 22),
+              decoration: BoxDecoration(
+                color: const Color(0x50fafafa),
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
+                border: Border.all(color: Colors.red)
+              ),
+              child: const Text("注册",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),),
+            ),
+          ),
+          ///进度圆圈
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Opacity(
+                opacity: animationController.value,
+                child: Container(
+                  height: 48,
+                  width: 48,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0x50fafafa),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  ///根据不同状态修改不同的中间显示
+                  child: buildLoadingWidget(),
+                ),
+              )
+            ],
+          )
+
+        ],
+      ),
+    );
+  }
+
+  RequestStatus currentRequestStatus = RequestStatus.none;
+
+  ///动态构建不同的显示进度圆圈
+  /// 加载中、加载错误、加载成功
+  Widget buildLoadingWidget() {
+    ///默认使用加载中
+    Widget loadingWidget = const CircularProgressIndicator();
+    if (currentRequestStatus == RequestStatus.success) {
+      ///加载成功显示小对钩
+      loadingWidget = const Icon(
+        Icons.check,
+        color: Colors.deepOrangeAccent,
+      );
+    } else if (currentRequestStatus == RequestStatus.error) {
+      ///加载失败状态显示 小X
+      loadingWidget = const Icon(
+        Icons.close,
+        color: Colors.red,
+      );
+    }
+    return loadingWidget;
+  }
 }
+
+enum RequestStatus {
+  none, //无状态
+  loading, //加载中
+  success, //加载成功
+  error, //加载失败
+  retry, //重试
+}
+
+
+
