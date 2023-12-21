@@ -39,6 +39,25 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
   late Animation<double> logoAnimation;
 
 
+
+  //输入框动画控制器
+  //当输入的手机号不合格或者是密码不合格时
+  //通过此动画实现抖动效果
+  late AnimationController inputAnimatController;
+  late Animation inputAnimaton;
+
+  ///抖动动画执行次数
+  int inputAnimationNumber = 0;
+
+  ///输入手机号码合格标识
+  /// 11位为合格，此值为false 否则为为true不合格
+  bool isPhoneError = false;
+
+  ///输入密码合格标识
+  /// 6-12位为合格，此值为false 否则为true不合格
+  bool isPasswordError = false;
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -71,6 +90,48 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
 
     //添加监听
     WidgetsBinding.instance.addObserver(this);
+
+
+
+    ///这里是通过左右摆动两次来实现的抖动动画
+    inputAnimatController = AnimationController(
+        duration: const Duration(milliseconds: 100), vsync: this);
+
+    ///构建线性动画，从0-10的匀速
+    inputAnimaton =
+        new Tween(begin: 0.0, end: 10.0).animate(inputAnimatController);
+
+    ///添加监听，动画执行的每一帧都会回调这里
+    inputAnimatController.addListener(() {
+      double value = inputAnimatController.value;
+      print("变化比率 $value");
+      setState(() {});
+    });
+
+    ///添加动画执行状态监听
+    inputAnimatController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        print("正向执行完毕 调用 forward方法动画执行完毕的回调");
+        inputAnimationNumber++;
+
+        ///反向执行动画
+        inputAnimatController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        print("反向执行完毕 调用reverse方法动画执行完毕的回调");
+
+        ///重置动画
+        inputAnimatController.reset();
+
+        ///记录动画的执行次数
+        ///执行2次便达到了左右抖动的视觉效果
+        if (inputAnimationNumber < 2) {
+          //正向执行动画
+          inputAnimatController.forward();
+        } else {
+          inputAnimationNumber = 0;
+        }
+      }
+    });
   }
 
   @override
@@ -196,7 +257,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
 
             ///logo
             buildLogo(),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
 
@@ -207,6 +268,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
                 focusNode: focusNode1,
                 nextFocusNode: focusNode2,
                 hintText: "请输入手机号",
+                isError: isPhoneError,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(11)
                   // FilteringTextInputFormatter.a
@@ -217,6 +279,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
                 iconData: Icons.lock,
                 controller: passwordController,
                 focusNode: focusNode2,
+                isError: isPasswordError,
                 nextFocusNode: null,
                 hintText: "请输入密码",
                 keyboardType: TextInputType.text),
@@ -280,24 +343,29 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
         FocusNode? nextFocusNode,
       String? hintText,
       TextInputAction? textInputAction,
+        required bool isError,
         List<TextInputFormatter>? inputFormatters,
       TextInputType? keyboardType}) {
-    return Container(
-      margin: const EdgeInsets.only(left: 22, right: 22, top: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          border:
-              Border.all(color: focusNode.hasFocus ? selectColor : normalColor),
-          color: const Color(0x50fafafa)),
-      // height: 20,
-      child: buildInputItemRow(
-          iconData: iconData,
-          controller: controller,
-          focusNode: focusNode,
-          hintText: hintText,
-          textInputAction: textInputAction,
-          inputFormatters:inputFormatters,
-          keyboardType: keyboardType,nextFocusNode: nextFocusNode),
+    return Transform.translate(
+      //只有为输入校验错误里才启用左右平移实现抖动提示效果
+      offset: Offset(isError ? inputAnimaton.value : 0, 0),
+      child: Container(
+        margin: const EdgeInsets.only(left: 22, right: 22, top: 20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            border:
+                Border.all(color: focusNode.hasFocus ? selectColor : normalColor),
+            color: const Color(0x50fafafa)),
+        // height: 20,
+        child: buildInputItemRow(
+            iconData: iconData,
+            controller: controller,
+            focusNode: focusNode,
+            hintText: hintText,
+            textInputAction: textInputAction,
+            inputFormatters:inputFormatters,
+            keyboardType: keyboardType,nextFocusNode: nextFocusNode),
+      ),
     );
   }
 
@@ -410,6 +478,36 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,Wid
         if (kDebugMode) {
           print("我使劲点开");
         }
+        ///隐藏输入框焦点
+        focusNode1.unfocus();
+        focusNode2.unfocus();
+
+        ///获取输入的电话号码
+        String inputPhone = phoneController.text;
+        if (inputPhone.isEmpty) {
+          ///更新标识 触发抖动动画
+          isPhoneError = true;
+          inputAnimatController.forward();
+          return;
+        } else {
+          isPhoneError = false;
+        }
+
+        ///获取输入的密码
+        String inputPassword = passwordController.text;
+        if (inputPassword.isEmpty) {
+          ///更新标识 触发抖动动画
+          isPasswordError = true;
+          inputAnimatController.forward();
+          return;
+        } else {
+          isPasswordError = false;
+        }
+
+
+
+
+
         ///启动动画控制器
         animationController.forward();
 
