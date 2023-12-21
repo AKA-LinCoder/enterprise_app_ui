@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin,WidgetsBindingObserver{
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -34,6 +34,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
   ///动画注册器
   late AnimationController animationController;
 
+  ///logo动画控制器
+  late AnimationController logoAnimationController;
+  late Animation<double> logoAnimation;
+
 
   @override
   void initState() {
@@ -47,13 +51,58 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       setState(() {});
     });
 
+    ///注册动画
     animationController = AnimationController(vsync: this,duration: const Duration(seconds: 4));
     animationController.addListener(() {
       setState(() {
 
       });
     });
+    ///logo动画控制
+    logoAnimationController = AnimationController(vsync: this,duration: const Duration(milliseconds: 500));
+    logoAnimationController.addListener(() {
+      setState(() {
+
+      });
+    });
+
+    ///动画执行方式
+    logoAnimation = Tween(begin: 1.0,end: 0.0).animate(logoAnimationController);
+
+    //添加监听
+    WidgetsBinding.instance.addObserver(this);
   }
+
+  @override
+  void didChangeMetrics() {
+    ///通过WidgetsBindingObserver的次方法监听页面布局变化
+    // TODO: implement didChangeMetrics
+    super.didChangeMetrics();
+    /*
+     *Frame是一次绘制过程，称其为一帧，Flutter engine受显示器垂直同步信号"VSync"的驱使不断的触发绘制，
+     *Flutter可以实现60fps（Frame Per-Second），就是指一秒钟可以触发60次重绘，FPS值越大，界面就越流畅。
+     */
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      //注意，不要在此类回调中再触发新的Frame，这可以会导致循环刷新。
+      setState(() {
+
+        ///获取底部遮挡区域的高度
+        double keyboardFlexHeight = MediaQuery.of(context).viewInsets.bottom;
+        print("键盘的高度 keyboardFlexHeight $keyboardFlexHeight");
+        if (MediaQuery.of(context).viewInsets.bottom == 0) {
+          //关闭键盘 启动logo动画反向执行 0.0 -1.0
+          // logo 布局区域显示出来
+          logoAnimationController.reverse();
+        } else {
+          //显示键盘 启动logo动画正向执行 1.0-0.0
+          // logo布局区域缩放隐藏
+          logoAnimationController.forward();
+        }
+      });
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +188,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            ///logoAnimation会从1到0,动态改变顶部距离
             ///顶部距离
             Container(
-              margin: const EdgeInsets.only(left: 22, right: 22, top: 100),
+              margin:  EdgeInsets.only(left: 22, right: 22, top: 100*logoAnimation.value),
             ),
 
             ///logo
@@ -183,37 +233,42 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
   }
 
   buildLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: (){
-            ///启动动画控制器
-            animationController.forward();
+    return ScaleTransition(
+      ///缩放中心
+      alignment: Alignment.center,
+      scale: logoAnimation,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: (){
+              ///启动动画控制器
+              animationController.forward();
 
-            // setState(() {
-            //   isRegistering = !isRegistering;
-            // });
-            Future.delayed(const Duration(milliseconds: 8000), (){
-              animationController.reverse();
-            });
-          },
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                "images/2.0/logo.jpg",
-                width: 55,
-              )),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        const Text(
-          "Echo",
-          style: TextStyle(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-        )
-      ],
+              // setState(() {
+              //   isRegistering = !isRegistering;
+              // });
+              Future.delayed(const Duration(milliseconds: 8000), (){
+                animationController.reverse();
+              });
+            },
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  "images/2.0/logo.jpg",
+                  width: 55,
+                )),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          const Text(
+            "Echo",
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
     );
   }
 
